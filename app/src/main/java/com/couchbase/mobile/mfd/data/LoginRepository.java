@@ -1,6 +1,15 @@
 package com.couchbase.mobile.mfd.data;
 
+import com.couchbase.lite.CouchbaseLiteException;
+import com.couchbase.lite.Database;
+import com.couchbase.lite.Document;
+import com.couchbase.lite.MutableDocument;
+import com.couchbase.mobile.mfd.R;
 import com.couchbase.mobile.mfd.data.model.LoggedInUser;
+import com.couchbase.mobile.mfd.lite.DatabaseManager;
+import com.couchbase.mobile.mfd.util.Result;
+
+import java.util.Date;
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -9,46 +18,55 @@ import com.couchbase.mobile.mfd.data.model.LoggedInUser;
 public class LoginRepository {
 
     private static volatile LoginRepository instance;
-
-    private LoginDataSource dataSource;
-
-    // If user credentials will be cached in local storage, it is recommended it be encrypted
-    // @see https://developer.android.com/training/articles/keystore
-    private LoggedInUser user = null;
+    private LoggedInUser mUser = null;
 
     // private constructor : singleton access
-    private LoginRepository(LoginDataSource dataSource) {
-        this.dataSource = dataSource;
+    private LoginRepository() {
     }
 
-    public static LoginRepository getInstance(LoginDataSource dataSource) {
+    public static LoginRepository getInstance() {
         if (instance == null) {
-            instance = new LoginRepository(dataSource);
+            instance = new LoginRepository();
         }
         return instance;
     }
 
     public boolean isLoggedIn() {
-        return user != null;
+        return mUser != null;
     }
 
     public void logout() {
-        user = null;
-        dataSource.logout();
+        mUser = null;
+        // TODO: Do we want to record the logout timestamp in the repository
     }
 
     private void setLoggedInUser(LoggedInUser user) {
-        this.user = user;
-        // If user credentials will be cached in local storage, it is recommended it be encrypted
-        // @see https://developer.android.com/training/articles/keystore
+        this.mUser = user;
     }
 
     public Result<LoggedInUser> login(String username, String password) {
-        // handle login
-        Result<LoggedInUser> result = dataSource.login(username, password);
-        if (result instanceof Result.Success) {
-            setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
+
+        Database repo = DatabaseManager.getSharedInstance().getLocalUserRepository();
+        if (repo == null) {
+            return new Result.Error(R.string.user_repo_unavailable);
         }
-        return result;
+
+        Document userDoc = repo.getDocument(username);
+        if (userDoc == null) {
+            return new Result.Error(R.string.no_local_user_found);
+        }
+
+        MutableDocument userMDoc = userDoc.toMutable();
+        userMDoc.setDate("lastLogin", new Date());
+
+        try {
+            repo.save(userMDoc);
+        } catch (CouchbaseLiteException e) {
+            return new Result.Error(R.string.unable_to_update_local_user, e);
+        }
+
+        mUser = new LoggedInUser(username, userDoc.getString("displayName"));
+        return new Result.Success<>(mUser);
+
     }
 }

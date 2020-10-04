@@ -6,6 +6,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.startup.Initializer;
 
+import com.couchbase.lite.CouchbaseLiteException;
+import com.couchbase.lite.Database;
+import com.couchbase.lite.DatabaseConfiguration;
+
 import java.util.Collections;
 import java.util.List;
 

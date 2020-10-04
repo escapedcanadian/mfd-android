@@ -13,6 +13,10 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    buildFeatures{
+        dataBinding = true
+        viewBinding = true
+    }
 
     buildTypes {
         release {
@@ -42,4 +46,5 @@ dependencies {
 
     implementation 'com.couchbase.lite:couchbase-lite-android-ee:2.8.0'
     implementation "androidx.startup:startup-runtime:1.0.0-beta01"
+    implementation "androidx.fragment:fragment-ktx:1.2.5"
 }

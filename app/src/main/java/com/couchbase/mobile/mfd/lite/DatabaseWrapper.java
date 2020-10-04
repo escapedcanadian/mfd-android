@@ -55,7 +55,7 @@ public class DatabaseWrapper {
         mDatabaseName = databaseName;
         mUserName = userName;
         mUserPassword = userPassword;
-        mDatabaseLocation = String.format("%s/%s", context.getFilesDir(), mUserName);
+        mDatabaseLocation = String.format("%s/data/%s", context.getFilesDir(), mUserName);
         mSupport = new PropertyChangeSupport(this);
 
 

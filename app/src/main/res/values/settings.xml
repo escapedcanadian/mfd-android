@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_game_server">192.168.1.81</string>
+    <integer name="game_server_port">3000</integer>
+    <integer name="min_username_length">3</integer>
+    <integer name="min_password_length">3</integer>
+</resources>

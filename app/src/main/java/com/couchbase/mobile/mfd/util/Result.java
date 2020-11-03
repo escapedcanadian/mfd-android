@@ -2,6 +2,8 @@ package com.couchbase.mobile.mfd.util;
 
 import android.util.Log;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * A generic class that holds a result success w/ data or an error exception.
  */
@@ -13,6 +15,7 @@ public class Result<T> {
     }
 
     @Override
+    @NotNull
     public String toString() {
         if (this instanceof Result.Success) {
             Result.Success success = (Result.Success) this;
@@ -29,9 +32,8 @@ public class Result<T> {
     }
 
 
-    public T render(OnSuccess<T> onSuccess, OnError<T> onError) {
+    public void render(OnSuccess<T> onSuccess, OnError<T> onError) {
         Log.e(LOG_TAG, "Unexpected execution of render in com.couchbase.mobile.mfd.util.Result superclass.");
-        return null;
     }
 
 
@@ -49,10 +51,11 @@ public class Result<T> {
 
         @Override
         @SuppressWarnings("unchecked")
-        public T render(OnSuccess onSuccess, OnError onError) {
+        public void render(OnSuccess onSuccess, OnError onError) {
             onSuccess.process(getData());
-            return getData();
         }
+
+
 
     }
 
@@ -84,23 +87,20 @@ public class Result<T> {
         };
 
         @Override
-        @SuppressWarnings("unchecked")
-        public T render(OnSuccess onSuccess, OnError onError) {
+        public void render(OnSuccess onSuccess, OnError onError) {
             onError.process(ResourceLocalizer.getLocalizedString(messageId), error);
-            return null;
         }
 
     }
 
 
-
     @FunctionalInterface
     public interface OnSuccess<T> {
-        public T process(T result);
+        public void process(T result);
     }
 
     @FunctionalInterface
     public interface OnError<T> {
-        public T process(String message, Exception e);
+        public void process(String message, Exception e);
     }
  }

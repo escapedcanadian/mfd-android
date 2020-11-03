@@ -31,7 +31,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center_horizontal"
-            android:text="Couchbase Treasure Hunt"
+            android:text="@string/app_name"
             android:textColor="@color/colorPrimary"
             android:textSize="28sp"
             android:textStyle="bold" />
@@ -41,6 +41,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
+            android:contentDescription="@string/couchbase_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -53,6 +54,16 @@
             android:layout_marginTop="24dp"
             android:gravity="center_horizontal"
             android:text="@string/existing_account_question" />
+
+        <TextView
+            android:id="@+id/login_error_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@{viewModel.loginError}"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
+            android:visibility="@{viewModel.loginError == null ? View.GONE : View.VISIBLE}" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/username_layout"
@@ -101,7 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="@string/pwd_requirements" />
+            android:text="@string/password_requirements" />
 
         <Button
             android:id="@+id/login"

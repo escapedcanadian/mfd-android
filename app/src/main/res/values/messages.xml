@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="internal_server_error">Internal Server Error: %1$s</string>
+    <string name="server_timeout_error">Timeout attempting to reach server %1$s</string>
+    <string name="unrecognized_response">Unrecognized response from server</string>
+    <string name="communication_error">Communication error</string>
+    <string name="username_requirements">Username must have a minimum 5 characters</string>
+    <string name="password_requirements">Passwords must have a minimum 5 characters</string>
+    <string name="password_mismatch">Passwords do not match</string>
+    <string name="email_invalid">Please provide a valid email</string>
+    <string name="first_name_invalid">Please provide your first name</string>
+    <string name="last_name_invalid">Please provide your last name</string>
+    <string name="registration_success">Registration was successful</string>
+    <string name="registration_failure">Registration failed</string>
+    <string name="registration_conflict">Username %1$s is already in use</string>
+    <string name="no_local_user_found">"Invalid username or password"</string>
+    <string name="wrong_password">"Invalid username or password"</string>
+</resources>

@@ -30,4 +30,6 @@ public class DatabaseInitializer implements Initializer<DatabaseManager> {
     public List<Class<? extends Initializer<?>>> dependencies() {
         return Collections.EMPTY_LIST;
     }
+
+
 }

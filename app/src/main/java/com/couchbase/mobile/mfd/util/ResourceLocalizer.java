@@ -14,6 +14,10 @@ public class ResourceLocalizer {
    }
 
     public static String getLocalizedString(int id) {
-       return instance.mContext.get().getResources().getString(id);
+        return instance.mContext.get().getResources().getString(id);
+    }
+
+    public static int getSettingsInt(int id) {
+        return instance.mContext.get().getResources().getInteger(id);
     }
 }

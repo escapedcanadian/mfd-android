@@ -8,6 +8,7 @@ import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
 import com.couchbase.lite.DatabaseConfiguration;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ public class DatabaseManager {
 
     private Map<String, DatabaseWrapper> wrapperMap = new HashMap<>();
     private Database mLocalUserRepository;
+    private static WeakReference<Context> wAppContext;
 
     private DatabaseManager() {
 
@@ -33,6 +35,7 @@ public class DatabaseManager {
 
     public static void initializeCouchbaseLite(Context context) {
 
+        wAppContext = new WeakReference<>(context);
         CouchbaseLite.init(context);
         DatabaseManager mgr = getSharedInstance();
         try {
@@ -48,9 +51,10 @@ public class DatabaseManager {
 
     }
 
-    public DatabaseWrapper openOrCreateDatabaseForUser(String databaseName, Context context, String userName, String userPassword) {
-
-        DatabaseWrapper wrapper = new DatabaseWrapper(databaseName, context, userName, userPassword);
+    public DatabaseWrapper openOrCreateDatabaseForUser(String databaseName, String userName, String userPassword) {
+        assert wAppContext != null;
+        assert wAppContext.get() != null;
+        DatabaseWrapper wrapper = new DatabaseWrapper(databaseName, wAppContext.get(), userName, userPassword);
         wrapperMap.put(databaseName, wrapper);
         return wrapper;
     }

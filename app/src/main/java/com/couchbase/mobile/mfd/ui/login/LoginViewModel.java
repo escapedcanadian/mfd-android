@@ -1,30 +1,28 @@
 package com.couchbase.mobile.mfd.ui.login;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
-import android.app.Application;
-import android.os.AsyncTask;
-import android.util.Log;
-import android.util.Patterns;
-
 import com.couchbase.mobile.mfd.data.LoginRepository;
+import com.couchbase.mobile.mfd.data.model.User;
+import com.couchbase.mobile.mfd.lite.DatabaseManager;
+import com.couchbase.mobile.mfd.lite.DatabaseWrapper;
+import com.couchbase.mobile.mfd.util.AppGlobals;
 import com.couchbase.mobile.mfd.util.Result;
-import com.couchbase.mobile.mfd.data.model.LoggedInUser;
-import com.couchbase.mobile.mfd.R;
-
-import java.lang.ref.WeakReference;
 
 public class LoginViewModel extends ViewModel {
-    private static final String LOG_TAG = "LoginViewModel";
+    private static final String LOG_TAG = "MFD_LoginViewModel";
 
     private MutableLiveData<String> mUsername = new MutableLiveData<>();
     private MutableLiveData<String> mPassword = new MutableLiveData<>();
+    private MutableLiveData<String> mLoginError = new MutableLiveData<>();
     private MutableLiveData<Boolean> mAttemptPossible = new MutableLiveData<>(false);
-    private MutableLiveData<LoggedInUser> mLoggedInUser = new MutableLiveData<>();
+    private MutableLiveData<User> mLoggedInUser = new MutableLiveData<>();
     private LoginRepository mLoginRepository;
+
 
 
     public LoginViewModel(LoginRepository loginRepository) {
@@ -47,18 +45,33 @@ public class LoginViewModel extends ViewModel {
         return mPassword;
     }
 
+    public MutableLiveData<String> getLoginError() {
+        return mLoginError;
+    }
+
+    public MutableLiveData<User> getLoggedInUser() {
+        return mLoggedInUser;
+    }
+
     public LiveData<Boolean> isAttemptPossible() {
         return mAttemptPossible;
     }
 
-    public LiveData<LoggedInUser> isLoggedInUser() {
-        return mLoggedInUser;
-    }
 
-    public Result<LoggedInUser> login() {
+    public Result<User> login() {
         Log.d(LOG_TAG, "LoginViewModel executing login");
-        Result<LoggedInUser> result = mLoginRepository.login(mUsername.getValue(), mPassword.getValue());
+        Result<User> result = mLoginRepository.login(mUsername.getValue(), mPassword.getValue());
+
         Log.d(LOG_TAG, "Login result: " + result.toString());
+        result.render(
+                (user)->{
+                    DatabaseWrapper gameInfoDB = DatabaseManager.getSharedInstance().openOrCreateDatabaseForUser(
+                            AppGlobals.gameInfoDB, mUsername.getValue(), mPassword.getValue());
+        },
+                (message, error)->{
+
+                }
+        );
         return result;
     }
 
@@ -66,7 +79,7 @@ public class LoginViewModel extends ViewModel {
         String currentUsername = mUsername.getValue();
         String currentPassword = mPassword.getValue();
         if (currentUsername != null && currentPassword != null) {
-            if ((currentUsername.length() >= 5) && (currentPassword.length() >= 5)) {
+            if ((currentUsername.length() >= 1) && (currentPassword.length() >= 1)) {
                 mAttemptPossible.setValue(true);
                 return;
             }

@@ -1,25 +1,21 @@
 package com.couchbase.mobile.mfd.util;
 
-import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.startup.Initializer;
 
-import com.couchbase.mobile.mfd.lite.DatabaseManager;
-
-import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.List;
 
-public class ResourceLocalizerInitializer implements Initializer<ResourceLocalizer> {
+public class AppGlobalsInitializer implements Initializer<AppGlobals> {
 
     @NonNull
     @Override
-    public ResourceLocalizer create(@NonNull Context context) {
-        Log.d("MFD_ResourceLocalizer", "Initializing Database Manager");
-        return new ResourceLocalizer(context);
+    public AppGlobals create(@NonNull Context context) {
+        Log.d("MFD_AppGlobals", "Initializing AppGlobals");
+        return new AppGlobals(context);
     }
 
     @NonNull

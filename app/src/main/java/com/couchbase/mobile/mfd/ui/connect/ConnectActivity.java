@@ -1,5 +1,6 @@
 package com.couchbase.mobile.mfd.ui.connect;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -63,7 +64,9 @@ public class ConnectActivity extends AppCompatActivity {
                                 return;
                             }
                             AppGlobals.getInstance().setApplicationServer(mServerAddress.getText().toString());
-                            setResult(RESULT_OK);
+                            Intent resultIntent = new Intent();
+                            resultIntent.putExtra("connectedServer", mServerAddress.getText().toString());
+                            setResult(RESULT_OK, resultIntent);
                             finish();
 
                         } catch (JSONException err) {

@@ -41,6 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
     private RegisterViewModel mRegisterViewModel;
     private ActivityResultLauncher<Intent> mConnectLauncher;
     private int mStatusCode;
+    private String mConnectedServer;
 
 
     @Override
@@ -65,6 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK) {
                             Log.d(LOG_TAG, "Returned from connect activity OK");
+                            mConnectedServer = result.getData().getStringExtra("connectedServer");
                         } else {
                             Log.d(LOG_TAG, "Returned from connect activity CANCELLED");
                             setResult(RESULT_CANCELED);
@@ -129,7 +131,10 @@ public class RegisterActivity extends AppCompatActivity {
                                     AppGlobals.getInstance().setLastUser(mRegisterViewModel.getUsername().getValue());
                                     runOnUiThread(()->{
                                         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-                                        setResult(RESULT_OK);
+                                        Intent resultIntent = new Intent();
+                                        resultIntent.putExtra("connectedServer", mConnectedServer);
+                                        resultIntent.putExtra("loggedInUser", user);
+                                        setResult(RESULT_OK, resultIntent);
                                         finish();
                                     });
                                 },

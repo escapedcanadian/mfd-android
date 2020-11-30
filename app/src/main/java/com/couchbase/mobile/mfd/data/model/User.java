@@ -1,9 +1,11 @@
 package com.couchbase.mobile.mfd.data.model;
 
+import java.io.Serializable;
+
 /**
  * Data class that captures user information for users retrieved from LoginRepository
  */
-public class User {
+public class User implements Serializable {
 
     public static final String ATR_USERNAME = "username";
     public static final String ATR_PASSWORD = "password";

@@ -13,7 +13,7 @@ public class AppGlobals {
     private static String LOG_TAG = "MFD_AppGlobals";
     private static String APP_PREFERENCES = "applicationPreferences";
 
-    public static String gameInfoDB = "gameInfo";
+    public static String gameInfoDB = "gameinfo";
 
     private WeakReference<Context> mContext;
     private static AppGlobals instance;

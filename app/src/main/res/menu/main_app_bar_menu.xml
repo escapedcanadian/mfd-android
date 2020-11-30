@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/replicator_config"
+        android:icon="@drawable/ic_not_connected"
+        app:showAsAction="ifRoom"
+        android:title="@string/replicator_status"
+        android:onClick="changeReplicatorConfig">
+    </item>
+    <item
+        android:id="@+id/replication_status"
+        android:icon="@drawable/ic_complete"
+        app:showAsAction="ifRoom"
+        android:title="@string/working"
+        android:onClick="startReplication">
+    </item>
+</menu>

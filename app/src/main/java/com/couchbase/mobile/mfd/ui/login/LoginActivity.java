@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.couchbase.mobile.mfd.ui.main.MainActivity;
+import com.couchbase.mobile.mfd.MainActivity;
 import com.couchbase.mobile.mfd.R;
 import com.couchbase.mobile.mfd.data.LoginRepository;
 import com.couchbase.mobile.mfd.databinding.ActivityLoginBinding;
@@ -37,6 +37,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<Intent> mRegistrationLauncher;
     private ActivityResultLauncher<Intent> mMainLauncher;
+
+    private String mConnectedServer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(LOG_TAG, "Returned from registration activity OK");
                             // Set the user on the login screen to match the name just registered
                             mLoginViewModel.getUsername().setValue(AppGlobals.getInstance().getLastUser());
+                            mConnectedServer = result.getData().getStringExtra("connectedServer");
                         } else {
                             Log.d(LOG_TAG, "Returned from registration activity CANCELLED");
                         }
@@ -96,9 +99,9 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK) {
-                            Log.d(LOG_TAG, "Returned from main activity OK");
+                            Log.d(LOG_TAG, "Returned from leader activity OK");
                         } else {
-                            Log.d(LOG_TAG, "Returned from main activity CANCELLED");
+                            Log.d(LOG_TAG, "Returned from leader activity CANCELLED");
                         }
                     }
                 }
@@ -124,6 +127,8 @@ public class LoginActivity extends AppCompatActivity {
                                 runOnUiThread(()->{
                                     mLoginViewModel.getLoggedInUser().setValue(user);});
                                     Intent mainIntent = new Intent(this, MainActivity.class);
+                                    mainIntent.putExtra("loggedInUser", user);
+                                    mainIntent.putExtra("connectedServer", mConnectedServer);
                                     mMainLauncher.launch(mainIntent);
                             },
                             (message, ex) -> {

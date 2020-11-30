@@ -14,9 +14,9 @@ import java.util.Map;
 
 public class DatabaseManager {
 
-    public static String LOG_TAG = "CBLite";
+    public static String LOG_TAG = "Lite-DatabaseManager";
     private static DatabaseManager instance = null;
-    static String syncGatewayEndpoint = "ws://192.168.1.81:4984/mfd";
+    static String syncGatewayEndpoint = "ws://192.168.1.81:4984";
 
     private Map<String, DatabaseWrapper> wrapperMap = new HashMap<>();
     private Database mLocalUserRepository;
